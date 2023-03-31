@@ -70,7 +70,7 @@ namespace redis.monitor
             var redisKey = new RedisKey("Ascertra-Key");
 
             Log($"Setting Value for Key : {redisKey}");
-            database.SetAdd(redisKey, new RedisValue("Ascertra-Value"));
+            database.StringSet(redisKey, new RedisValue("Ascertra-Value"));
             Log($"Getting Value for Key : {redisKey} with value : {database.StringGet(redisKey)}");
         }
 
