@@ -129,8 +129,7 @@ namespace redis.monitor
         {
             UpdateUI(() =>
             {
-                txtConnectionLog.Text += $"Time : {DateTime.Now} Message : {value} {Environment.NewLine}";
-                txtConnectionLog.Select(txtConnectionLog.Text.Length, 0);
+                txtConnectionLog.Text = txtConnectionLog.Text.Insert(0, $"Time : {DateTime.Now} Message : {value} {Environment.NewLine}");
             });
         }
 

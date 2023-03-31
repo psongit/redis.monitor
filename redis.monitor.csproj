@@ -8,6 +8,14 @@
         <!--<PublishReadyToRun>true</PublishReadyToRun>-->
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DebugType>none</DebugType>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <DebugType>none</DebugType>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="StackExchange.Redis" Version="2.6.96" />
     </ItemGroup>
