@@ -18,7 +18,11 @@ namespace redis.monitor
         public MainWindow()
         {
             InitializeComponent();
-            _triggerTimer = new Timer(5000) { Enabled = true};
+            _triggerTimer = new Timer(5000) { Enabled = true };
+        }
+        private async void btnRedisClear_Click(object sender, RoutedEventArgs e)
+        {
+            txtConnectionLog.Clear();
         }
 
         private async void btnRedisConnect_Click(object sender, RoutedEventArgs e)
@@ -61,17 +65,24 @@ namespace redis.monitor
 
         private async void TriggerTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            var connectionStatus = _connectionMultiplexer.GetStatus();
-            Log($"Connection Status : {connectionStatus}");
+            try
+            {
+                var connectionStatus = _connectionMultiplexer.GetStatus();
+                Log($"Connection Status : {connectionStatus}");
 
-            var database = _connectionMultiplexer.GetDatabase();
-            Log($"Is Database Connected : {database.IsConnected}");
+                var database = _connectionMultiplexer.GetDatabase();
+                Log($"Is Database Connected : {database.IsConnected("Ascertra-Key")}");
 
-            var redisKey = new RedisKey("Ascertra-Key");
+                var redisKey = new RedisKey("Ascertra-Key");
 
-            Log($"Setting Value for Key : {redisKey}");
-            database.StringSet(redisKey, new RedisValue("Ascertra-Value"));
-            Log($"Getting Value for Key : {redisKey} with value : {database.StringGet(redisKey)}");
+                Log($"Setting Value for Key : {redisKey}");
+                database.StringSet(redisKey, new RedisValue("Ascertra-Value"));
+                Log($"Getting Value for Key : {redisKey} with value : {database.StringGet(redisKey)}");
+            }
+            catch(Exception ex)
+            {
+                Log(ex.ToString());
+            }
         }
 
         private void ConnectionMultiplexer_HashSlotMoved(object? sender, HashSlotMovedEventArgs e)
@@ -116,7 +127,11 @@ namespace redis.monitor
 
         private void Log(string value)
         {
-            UpdateUI(() => txtConnectionLog.Text += $"Time : {DateTime.Now} Message : {value} {Environment.NewLine}");
+            UpdateUI(() =>
+            {
+                txtConnectionLog.Text += $"Time : {DateTime.Now} Message : {value} {Environment.NewLine}";
+                txtConnectionLog.Select(txtConnectionLog.Text.Length, 0);
+            });
         }
 
         private async Task<Task> UpdateUI(Action action)
