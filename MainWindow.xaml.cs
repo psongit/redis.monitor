@@ -67,17 +67,9 @@ namespace redis.monitor
         {
             try
             {
-                var connectionStatus = _connectionMultiplexer.GetStatus();
-                Log($"Connection Status : {connectionStatus}");
-
                 var database = _connectionMultiplexer.GetDatabase();
-                Log($"Is Database Connected : {database.IsConnected("Ascertra-Key")}");
-
                 var redisKey = new RedisKey("Ascertra-Key");
-
-                Log($"Setting Value for Key : {redisKey}");
                 database.StringSet(redisKey, new RedisValue("Ascertra-Value"));
-                Log($"Getting Value for Key : {redisKey} with value : {database.StringGet(redisKey)}");
             }
             catch(Exception ex)
             {
